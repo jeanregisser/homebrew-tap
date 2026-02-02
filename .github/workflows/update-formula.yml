@@ -1,0 +1,38 @@
+name: Update Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      formula:
+        description: 'Formula name (e.g., bitwarden-cli-bio)'
+        required: true
+        type: string
+      version:
+        description: 'Version to update to (e.g., 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Update formula
+        run: node --experimental-strip-types scripts/update-formula.ts "${{ inputs.formula }}" "${{ inputs.version }}"
+      - name: Lint formula
+        run: |
+          brew tap-new test/temp --no-git
+          cp "Formula/${{ inputs.formula }}.rb" "$(brew --repository)/Library/Taps/test/homebrew-temp/Formula/"
+          brew audit --new --formula "test/temp/${{ inputs.formula }}"
+          brew style "test/temp/${{ inputs.formula }}"
+          brew fetch "test/temp/${{ inputs.formula }}"
+          brew untap test/temp
+      - name: Commit and push
+        run: |
+          git add "Formula/${{ inputs.formula }}.rb"
+          git commit -m "chore: update ${{ inputs.formula }} to ${{ inputs.version }}"
+          git push
