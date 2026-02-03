@@ -18,7 +18,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Use PAT to allow the push to trigger the tests.yml workflow
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
       - name: Setup Git
         run: |
           git config user.name "github-actions[bot]"
