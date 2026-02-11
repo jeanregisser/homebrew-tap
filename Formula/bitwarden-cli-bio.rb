@@ -1,8 +1,8 @@
 class BitwardenCliBio < Formula
   desc "Bitwarden CLI with biometric unlock (Touch ID, Windows Hello, Linux)"
   homepage "https://github.com/jeanregisser/bitwarden-cli-bio"
-  url "https://registry.npmjs.org/bitwarden-cli-bio/-/bitwarden-cli-bio-1.4.1.tgz"
-  sha256 "c410e23fddbf728373e9adde67c19222ec98574215433303d0df4afc365d0cae"
+  url "https://registry.npmjs.org/bitwarden-cli-bio/-/bitwarden-cli-bio-1.4.2.tgz"
+  sha256 "a3870172adad7cba44c06c3b208228cb2b2d75e7cbac633f61888b54c33c4e26"
   license "MIT"
 
   livecheck do
