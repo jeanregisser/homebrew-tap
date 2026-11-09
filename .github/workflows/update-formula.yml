@@ -31,6 +31,7 @@ jobs:
       - name: Lint formula
         run: |
           brew tap-new test/temp --no-git
+          brew trust --tap test/temp
           cp "Formula/${{ inputs.formula }}.rb" "$(brew --repository)/Library/Taps/test/homebrew-temp/Formula/"
           brew audit --new --formula "test/temp/${{ inputs.formula }}"
           brew style "test/temp/${{ inputs.formula }}"

@@ -26,7 +26,13 @@ if (!oldVersion) {
 const newUrl = oldUrl.replaceAll(oldVersion, version);
 
 // Download tarball and compute SHA256
-const response = await fetch(newUrl);
+// Retry 404s: a just-published npm tarball can take a minute to become available
+let response = await fetch(newUrl);
+for (let attempt = 1; response.status === 404 && attempt <= 10; attempt++) {
+  console.log(`Got 404 for ${newUrl}, retrying in 15s (${attempt}/10)`);
+  await new Promise((resolve) => setTimeout(resolve, 15_000));
+  response = await fetch(newUrl);
+}
 if (!response.ok) {
   console.error(`Failed to fetch ${newUrl}: ${response.status}`);
   process.exit(1);
